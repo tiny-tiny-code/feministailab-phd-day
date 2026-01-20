@@ -1,0 +1,401 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'VT323', monospace;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #893dc2 100%);
+    position: relative;
+  }
+  
+  body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.03) 2px, rgba(0,0,0,.03) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.03) 2px, rgba(0,0,0,.03) 4px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  /* Navigation bar */
+  .navbar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 20px;
+    background: rgba(254, 249, 231, 0.784);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+  
+  .back-button {
+    position: absolute;
+    left: 20px;
+    background: #2c2416;
+    color: #fef9e7;
+    border: none;
+    padding: 8px 20px;
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 3px 3px 6px rgba(0,0,0,0.15);
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  
+  .back-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.2);
+    background: #3d3520;
+  }
+  
+  .navbar-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+  }
+  
+  .navbar-logo img {
+    height: 50px;
+    width: auto;
+  }
+  
+  .navbar-logo-placeholder {
+    height: 50px;
+    width: 150px;
+    background: #d4c5a9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #2c2416;
+    border: 2px dashed #2c2416;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  
+  h1 {
+    font-size: 48px;
+    color: #2c2416;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    margin-bottom: 20px;
+  }
+  
+  .questions {
+    font-size: 22px;
+    color: #2c2416;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    max-width: 800px;
+    margin: 0 auto 30px;
+    text-align: left;
+  }
+  
+  .questions div {
+    margin-bottom: 10px;
+  }
+  
+  .add-button {
+    background: #fef9e7;
+    border: none;
+    padding: 12px 30px;
+    font-family: 'VT323', monospace;
+    font-size: 26px;
+    cursor: pointer;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.15);
+    transition: all 0.2s;
+    color: #2c2416;
+  }
+  
+  .add-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 6px 6px 12px rgba(0,0,0,0.2);
+  }
+  
+  .notes-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+  }
+  
+  .postit {
+    background: #fef9e7;
+    width: 200px;
+    min-height: 200px;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+    position: relative;
+    padding: 16px;
+    font-size: 18px;
+    line-height: 1.4;
+    color: #2c2416;
+    overflow-wrap: break-word;
+  }
+  
+  .postit:hover {
+    transform: translateY(-2px);
+    box-shadow: 6px 6px 12px rgba(0,0,0,0.2), inset 0 0 0 1px rgba(0,0,0,0.05);
+  }
+  
+  .postit:hover .delete-btn {
+    opacity: 1;
+  }
+  
+  .delete-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: transparent;
+    border: none;
+    color: #999;
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s;
+    width: 24px;
+    height: 24px;
+    line-height: 1;
+    padding: 0;
+  }
+  
+  .delete-btn:hover {
+    color: #ff0000;
+  }
+  
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .modal.active {
+    display: flex;
+  }
+  
+  .modal-content {
+    background: #fef9e7;
+    padding: 30px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 8px 8px 16px rgba(0,0,0,0.3);
+  }
+  
+  .modal-content h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #2c2416;
+  }
+  
+  .modal-textarea {
+    width: 100%;
+    height: 150px;
+    background: #fff;
+    border: 2px solid #d4c5a9;
+    padding: 12px;
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    resize: none;
+    color: #2c2416;
+    margin-bottom: 20px;
+  }
+  
+  .modal-textarea:focus {
+    outline: 2px solid #667eea;
+  }
+  
+  .modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+  }
+  
+  .loading {
+    text-align: center;
+    font-size: 32px;
+    color: #2c2416;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    padding: 100px 0;
+  }
+  
+  .empty {
+    text-align: center;
+    font-size: 28px;
+    color: #2c2416;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    padding: 60px 20px;
+  }
+  
+  /* Theme variations - overrides for different pages */
+  
+  /* Feminism theme - Green gradient */
+  body.theme-feminism {
+    background: linear-gradient(135deg, #56ab2f 0%, #26a69a 50%, #3f51b5 100%);
+  }
+  
+  body.theme-feminism .modal-textarea:focus {
+    outline: 2px solid #26a69a;
+  }
+  
+  /* Inspiration theme - Pink gradient */
+  body.theme-inspiration {
+    background: linear-gradient(135deg, #ff6b9d 0%, #c364ff 50%, #9b59b6 100%);
+  }
+  
+  body.theme-inspiration .modal-textarea:focus {
+    outline: 2px solid #ff6b9d;
+  }
+  
+  /* Methods theme - Orange/Pink gradient */
+  body.theme-methods {
+    background: linear-gradient(135deg, #ff9a56 0%, #ff6b9d 50%, #c364ff 100%);
+  }
+  
+  body.theme-methods .modal-textarea:focus {
+    outline: 2px solid #ff9a56;
+  }
+  
+  /* Homepage styles */
+  body.homepage {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+  }
+  
+  body.homepage .navbar {
+    width: 100%;
+    position: static;
+  }
+  
+  body.homepage .container {
+    max-width: 900px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+  
+  body.homepage h1 {
+    font-size: 56px;
+    margin-bottom: 15px;
+  }
+  
+  .subtitle {
+    font-size: 28px;
+    color: #2c2416;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  }
+  
+  .themes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+  
+  .theme-card {
+    background: #fef9e7;
+    padding: 30px;
+    box-shadow: 6px 6px 12px rgba(0,0,0,0.2);
+    transition: all 0.3s;
+    text-decoration: none;
+    display: block;
+    min-height: 200px;
+  }
+  
+  .theme-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 8px 8px 16px rgba(0,0,0,0.25);
+  }
+  
+  .theme-card h2 {
+    font-size: 32px;
+    color: #2c2416;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  .theme-card p {
+    font-size: 20px;
+    color: #4a4a4a;
+    line-height: 1.5;
+    text-align: center;
+  }
+  
+  .theme-card.methods {
+    background: linear-gradient(135deg, rgba(255, 154, 86, 0.2), rgba(255, 107, 157, 0.2));
+    background-color: #fef9e7;
+  }
+  
+  .theme-card.feminism {
+    background: linear-gradient(135deg, rgba(86, 171, 47, 0.2), rgba(38, 166, 154, 0.2));
+    background-color: #fef9e7;
+  }
+  
+  .theme-card.inspiration {
+    background: linear-gradient(135deg, rgba(255, 107, 157, 0.2), rgba(195, 100, 255, 0.2));
+    background-color: #fef9e7;
+  }
+  
+  .theme-card.community {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+    background-color: #fef9e7;
+  }
+  
+  .footer {
+    text-align: center;
+    font-size: 22px;
+    color: #2c2416;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    margin-top: 40px;
+  }
+  
+  @media (max-width: 768px) {
+    body.homepage h1 {
+      font-size: 40px;
+    }
+    
+    .subtitle {
+      font-size: 24px;
+    }
+  
+    .themes-grid {
+      grid-template-columns: 1fr;
+    }
+  }
